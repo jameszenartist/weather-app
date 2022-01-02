@@ -3,6 +3,8 @@ let button = document.getElementById("submit");
 let city = document.querySelector("input[name='city']");
 let country = document.querySelector("input[name='country']");
 
+let trigger = true;
+
 button.addEventListener("click", async () => {
   if (city.value === "") {
     alert("Please enter a city");
@@ -31,15 +33,38 @@ const displayWeather = (data) => {
         <br>
         Country: ${data.sys.country}
         <br>
-        Temp: ${kelvinToFahrenheit(data.main.temp)} &deg;F
-        <br>
+        <div class="temp">Temp:  ${kelvinToFahrenheit(
+          data.main.temp
+        )} &deg;F</div>
+        
         Humidity: ${data.main.humidity}%
         <br>
-        Wind: ${data.wind.speed} mph`;
+        Wind: ${data.wind.speed} mph
+        <br>
+        <button class="change" onclick="convert()">Celsius</button>`;
+
   city.value = "";
   country.value = "";
 };
 
+let celsius;
+let fahrenheit;
 const kelvinToFahrenheit = (temp) => {
-  return Math.ceil(((temp - 273.15) * 9) / 5 + 32);
+  celsius = Math.ceil(temp - 273.15);
+  fahrenheit = Math.ceil(((temp - 273.15) * 9) / 5 + 32);
+  return fahrenheit;
 };
+
+function convert() {
+  if (trigger) {
+    document.querySelector(".temp").textContent = `Temp:  ${parseInt(
+      celsius
+    )} °C`;
+    document.querySelector(".change").textContent = "Fahrenheit";
+    trigger = false;
+  } else {
+    document.querySelector(".temp").textContent = `Temp:  ${fahrenheit} °F`;
+    document.querySelector(".change").textContent = "Celsius";
+    trigger = true;
+  }
+}
